@@ -27,7 +27,10 @@ var startGame = function() {
 
     var pickedEnemyName = enemyNames[i];
 
-    enemyHealth = 50;
+    // generate random damage value based on player's attack power
+    var damage = randomNumber(platerAttack - 3, playerAttack);
+
+    enemyHealth = Math.max(0, enemyHealth - damage);
 
     fight(pickedEnemyName);
 
@@ -107,11 +110,20 @@ if (playerHealth > 0 && i < enemyNames.length - 1) {
     shop();
   }
 }
+
+
 var shop = function() {
   // ask player what they'd like to do
   var shopOptionPrompt = window.prompt(
     "Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one: 'REFILL', 'UPGRADE', or 'LEAVE' to make a choice."
     );
+// function to generate a random numeric value
+var randomNumber = function(min, max) {
+  var value = Math.floor(Math.random() * (max - min + 1) + min);
+
+  return value;
+};
+
     // use switch to carry out action
 switch (shopOptionPrompt) {
   case "REFILL": // new case
@@ -159,7 +171,7 @@ switch (shopOptionPrompt) {
       }
   
       // remove enemy's health by subtracting the amount set in the playerAttack variable
-      enemyHealth = enemyHealth - playerAttack;
+      enemyHealth = Math.max(0, enemyHealth- playerAttack);
       console.log(
         playerName + ' attacked ' + enemyName + '. ' + enemyName + ' now has ' + enemyHealth + ' health remaining.'
       );
@@ -170,6 +182,7 @@ switch (shopOptionPrompt) {
   
         // award player money for winning
         playerMoney = playerMoney + 20;
+
   
         // leave while() loop since enemy is dead
         break;
@@ -178,7 +191,9 @@ switch (shopOptionPrompt) {
       }
   
       // remove players's health by subtracting the amount set in the enemyAttack variable
-      playerHealth = playerHealth - enemyAttack;
+      var damage = randomNumber(enemyAtatck - 3, enemyAttack);
+
+      playerHealth = Math.max(0, playerHealth - damage);
       console.log(
         enemyName + ' attacked ' + playerName + '. ' + playerName + ' now has ' + playerHealth + ' health remaining.'
       );
@@ -191,7 +206,8 @@ switch (shopOptionPrompt) {
       } else {
         window.alert(playerName + ' still has ' + playerHealth + ' health left.');
       }
-      
+    playerMoney = Math.max(0, playerMoney-10);
+
     }
   };
   // start the game when the page loads
